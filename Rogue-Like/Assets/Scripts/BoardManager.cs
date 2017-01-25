@@ -4,7 +4,6 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-
 public class BoardManager : MonoBehaviour {
 
 	[Serializable]
@@ -12,7 +11,6 @@ public class BoardManager : MonoBehaviour {
 	{
 		public int minimum;
 		public int maximum;
-
 
 		public Count (int min, int max) {
 			minimum = min;
@@ -60,7 +58,6 @@ public class BoardManager : MonoBehaviour {
 				instance.transform.SetParent (this.boardHolder);
 			}
 		}
-
 	}
 
 	Vector3 RandomPosition() {
@@ -78,7 +75,6 @@ public class BoardManager : MonoBehaviour {
 			GameObject tileChoice = tiles[Random.Range(0, tiles.Length)];
 			Instantiate (tileChoice, pos, Quaternion.identity);
 		}
-	
 	}
 
 	public void SetupScene(int level) {
