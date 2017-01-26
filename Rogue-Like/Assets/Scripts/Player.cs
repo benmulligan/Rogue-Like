@@ -40,7 +40,7 @@ public class Player : MovingObject {
 
 	}
 
-	private void OnTriggerEnter2d (Collider2D other) {
+	private void OnTriggerEnter2D (Collider2D other) {
 
 		if (other.tag == "Exit") {
 			Invoke ("Restart", this.restartLevelDelay);
@@ -68,7 +68,7 @@ public class Player : MovingObject {
 	}
 
 	public void LoseFood(int x) {
-		animator.SetTrigger ("playerHit");
+		this.animator.SetTrigger ("playerHit");
 		this.food -= x;
 		this.CheckIfGameOver ();
 	}
