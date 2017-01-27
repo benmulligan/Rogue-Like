@@ -10,12 +10,25 @@ public class Player : MovingObject {
 	public int pointsForFood = 10;
 	public int pointsForSoda = 20;
 	public int restartLevelDelay = 1;
+
+	// UI
 	public Text foodText;
 
+
+	// Audio
+	public AudioClip moveSound1;
+	public AudioClip moveSound2;
+	public AudioClip eatSound1;
+	public AudioClip eatSound2;
+	public AudioClip drinkSound1;
+	public AudioClip drinkSound2;
+	public AudioClip gameOverSound;
+
+
 	private Animator animator;
+
+	// State
 	private int food;
-
-
 
 	// Use this for initialization
 	protected override void Start () {
@@ -51,10 +64,12 @@ public class Player : MovingObject {
 		} else if (other.tag == "Food") {
 			this.food += this.pointsForFood;
 			this.foodText.text = "+" + this.pointsForFood + " | Food: " + this.food;
+			SoundManager.instance.RandomizeSfx (this.eatSound1, this.eatSound2);
 			other.gameObject.SetActive (false);
 		} else if (other.tag == "Soda") {
 			this.food += this.pointsForSoda;
 			this.foodText.text = "+" + this.pointsForSoda + " | Food: " + this.food;
+			SoundManager.instance.RandomizeSfx (this.drinkSound1, this.drinkSound2);
 			other.gameObject.SetActive (false);
 		}
 	}
@@ -69,7 +84,6 @@ public class Player : MovingObject {
 	}
 
 	private void Restart() {
-		Debug.Log ("Restart");
 		SceneManager.LoadScene (0);
 	}
 
@@ -86,13 +100,16 @@ public class Player : MovingObject {
 	}
 
 	protected override void AttemptMove <T> (int xDir, int yDir) {
-		Debug.Log ("Moving");
 		this.food--;
 		this.foodText.text = "Food: " + this.food;
 
 		base.AttemptMove<T> (xDir, yDir);
 
 		RaycastHit2D hit;
+		if (Move (xDir, yDir, out hit)) {
+			SoundManager.instance.RandomizeSfx (this.moveSound1, this.moveSound2);
+		}
+
 		this.CheckIfGameOver ();
 
 		GameManager.instance.playersTurn = false;
@@ -101,6 +118,8 @@ public class Player : MovingObject {
 	private void CheckIfGameOver () {
 		if (this.food <= 0) {
 			GameManager.instance.GameOver ();
+			SoundManager.instance.PlaySingle (this.gameOverSound);
+			SoundManager.instance.musicSource.Stop ();
 		}
 	}
 }
