@@ -30,6 +30,8 @@ public class Player : MovingObject {
 	// State
 	private int food;
 
+	private Vector2 touchPos = -Vector2.one;
+
 	// Use this for initialization
 	protected override void Start () {
 		this.animator = this.GetComponent<Animator> ();
@@ -44,12 +46,38 @@ public class Player : MovingObject {
 			return; 
 		}
 
-		int horizontal = (int)Input.GetAxisRaw ("Horizontal");
-		int vertical = (int)Input.GetAxisRaw ("Vertical");
+		int horizontal = 0;
+		int vertical = 0;
+
+		#if UNITY_STANDALONE || UNITY_WEBPLAYER
+		horizontal = (int)Input.GetAxisRaw ("Horizontal");
+		vertical = (int)Input.GetAxisRaw ("Vertical");
 
 		if (horizontal != 0) {
 			vertical = 0; 
 		}
+
+		#else 
+
+		if (Input.touchCount > 0) {
+			Touch t = Input.touches[0];
+			if (t.phase == TouchPhase.Began) {
+				this.touchPos = t.position;
+			} else if (t.phase == TouchPhase.Ended && t.position.x >= 0) {
+				float deltaX = t.position.x - this.touchPos.x;
+				float deltaY = t.position.y - this.touchPos.y;
+				this.touchPos.x = -1; // prevents this from repeating without a new touch event
+
+				// figure out what direction the user attempted to input
+				if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY)) {
+					horizontal = deltaX > 0 ? 1 : -1;
+				} else {
+					vertical = deltaY > 0 ? 1 : -1;
+				}
+			}
+		}
+
+		#endif
 
 		if (horizontal != 0 || vertical != 0) {
 			AttemptMove<Wall> (horizontal, vertical);

@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode) {
-		Debug.Log ("OnLevelFinishedLoading");
 		this.level++;
 		this.InitGame ();
 	}
@@ -52,7 +51,6 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void InitGame() {
-		Debug.Log ("--- INIT");
 		this.doingSetup = true;
 
 		this.levelImage = GameObject.Find ("LevelImage");
