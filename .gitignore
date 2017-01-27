@@ -28,3 +28,9 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+Rogue-Like/Library/
+
+Rogue-Like/Temp/
+
+Rogue-Like/obj/
